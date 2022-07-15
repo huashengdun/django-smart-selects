@@ -82,20 +82,27 @@
             init: function (chainfield, url, id, init_value, empty_label, auto_choose) {
                 var val, fill_field = this.fill_field;
 
-                if (!$(chainfield).hasClass("chained")) {
-                    val = $(chainfield).val();
-                    fill_field(val, init_value, id, url, empty_label, auto_choose);
-                }
+                // if (!$(chainfield).hasClass("chained")) {
+                //     val = $(chainfield).val();
+                //     fill_field(val, init_value, id, url, empty_label, auto_choose);
+                // }
                 $(chainfield).change(function () {
                     // Handle the case of inlines, where the ID will depend on which list item we are dealing with
                     var prefix, start_value, this_val, localID = id;
                     if (localID.indexOf("__prefix__") > -1) {
-                        prefix = $(this).attr("id").match(/\d+/)[0];
-                        localID = localID.replace("__prefix__", prefix);
+                        return;
+                        // prefix = $(this).attr("id").match(/\d+/)[0];
+                        // localID = localID.replace("__prefix__", prefix);
                     }
 
                     start_value = $(localID).val();
                     this_val = $(this).val();
+
+                    // initialization change needs no request
+                    if (this_val && start_value && val === undefined) {
+                       return;
+                    }
+                    val = 'changed'
                     fill_field(this_val, start_value, localID, url, empty_label, auto_choose);
                 });
                 if (typeof(dismissAddAnotherPopup) !== 'undefined') {
